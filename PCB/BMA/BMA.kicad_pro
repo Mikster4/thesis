@@ -128,8 +128,8 @@
           "drill": 0.0
         },
         {
-          "diameter": 0.3,
-          "drill": 0.2
+          "diameter": 0.8,
+          "drill": 0.3
         }
       ],
       "zones_allow_external_fillets": false,
@@ -351,7 +351,7 @@
     "pinned_symbol_libs": []
   },
   "meta": {
-    "filename": "BMA-ROUTER.kicad_pro",
+    "filename": "BMA.kicad_pro",
     "version": 1
   },
   "net_settings": {
@@ -383,7 +383,7 @@
     "last_paths": {
       "gencad": "",
       "idf": "",
-      "netlist": "",
+      "netlist": "C:/Program Files/KiCad/6.0/",
       "specctra_dsn": "BMA.dsn",
       "step": "",
       "vrml": ""

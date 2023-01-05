@@ -5,13 +5,13 @@
       "Application": "Pcbnew",
       "Version": "(6.0.9)"
     },
-    "CreationDate": "2023-01-03T15:05:35+01:00"
+    "CreationDate": "2023-01-05T12:03:18+01:00"
   },
   "GeneralSpecs": {
     "ProjectId": {
       "Name": "BMA",
       "GUID": "424d412e-6b69-4636-9164-5f7063625858",
-      "Revision": "rev?"
+      "Revision": "0.1"
     },
     "Size": {
       "X": 91.64,
