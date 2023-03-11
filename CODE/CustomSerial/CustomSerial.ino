@@ -14,31 +14,11 @@ char buf[BUFFER_SIZE];
 void setup() {
   Wire.begin();
   Serial.begin(115200);
-
-  pinMode(2, OUTPUT);
-  pinMode(3, OUTPUT);
-  pinMode(4, OUTPUT);
-  pinMode(5, OUTPUT);
-  pinMode(6, OUTPUT);
-  pinMode(7, OUTPUT);
-  pinMode(8, OUTPUT);
-  pinMode(9, OUTPUT);
-  pinMode(10, OUTPUT);
-  pinMode(11, OUTPUT);
-  pinMode(12, OUTPUT);
-  pinMode(13, OUTPUT);
-  digitalWrite(2, LOW);
-  digitalWrite(3, LOW);
-  digitalWrite(4, LOW);
-  digitalWrite(5, LOW);
-  digitalWrite(6, LOW);
-  digitalWrite(7, LOW);
-  digitalWrite(8, LOW);
-  digitalWrite(9, LOW);
-  digitalWrite(10, LOW);
-  digitalWrite(11, LOW);
-  digitalWrite(12, LOW);
-  digitalWrite(13, LOW);
+  
+  for (int i = 2; i <= 13; i++) {
+    pinMode(i, OUTPUT);
+    digitalWrite(i, LOW);
+  }
 
   while (!Serial) {
     ;  // wait for serial port to connect. Needed for native USB port only
@@ -98,11 +78,9 @@ void readMessage() {
       // Do the meassurement
       if (buf[i] >= 0x30 && buf[i] <= 0x3F && buf[i] % 0x30 >= 1 && buf[i] % 0x30 <= 4) {
         adc_1.startSingleMeasurement();
-        //while (adc_1.isBusy()) {}
         voltage = adc_1.getResult_mV();
       } else {
         adc_2.startSingleMeasurement();
-        //while (adc_2.isBusy()) {}
         voltage = adc_2.getResult_mV();
       }
       Serial.println("Voltage: " + String(voltage));
