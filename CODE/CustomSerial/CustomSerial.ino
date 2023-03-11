@@ -46,14 +46,14 @@ void setup() {
   if (!adc_1.init()) {
     Serial.print("ADS1115 No 1 not connected!");
   }
-  adc_1.setVoltageRange_mV(ADS1115_RANGE_6144);
+  adc_1.setVoltageRange_mV(ADS1115_RANGE_0256);
   //adc_1.setMeasureMode(ADS1115_CONTINUOUS);
   adc_1.setCompareChannels(ADS1115_COMP_0_GND);
 
   if (!adc_2.init()) {
     Serial.print("ADS1115 No 2 not connected!");
   }
-  adc_2.setVoltageRange_mV(ADS1115_RANGE_6144);
+  adc_2.setVoltageRange_mV(ADS1115_RANGE_0256);
   //adc_2.setMeasureMode(ADS1115_CONTINUOUS);
   adc_2.setCompareChannels(ADS1115_COMP_0_GND);
 }
@@ -109,23 +109,13 @@ void readMessage() {
     }
 
     // Handle opening of input valves
-    if (buf[i] <= 0x4F) {
+    if (buf[i] >= 0x40 && buf[i] <= 0x4F) {
       digitalWrite(buf[i] % 0x40, HIGH);
     }
 
     // Handle closing of input valves
-    if (buf[i] <= 0x5F) {
+    if (buf[i] >= 0x50 && buf[i] <= 0x5F) {
       digitalWrite(buf[i] % 0x50, LOW);
-    }
-
-    // Handle opening of output valves
-    if (buf[i] <= 0x6F) {
-      digitalWrite(buf[i] % 0x60, HIGH);
-    }
-
-    // Handle closing of output valves
-    if (buf[i] <= 0x6F) {
-      digitalWrite(buf[i] % 0x60, LOW);
     }
   }
 }
