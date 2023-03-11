@@ -11,7 +11,7 @@ def read_data(filename):
 fig = plt.figure()
 ax = fig.add_subplot(projection="3d")
 
-data = read_data("data/Platform_Test_1_Rotation_001.csv")
+data = read_data("data/Platform_Test_1_002.csv")
 
 results = np.empty((3,4))
 
@@ -35,3 +35,22 @@ ax.set_ylabel("Y")
 ax.set_zlabel("Z")
 
 plt.show()
+
+# Plot the roll data as a function of time
+plt.plot(data[:, 0], abs(data[:, 2] - np.max(data[:,2])), color="red")
+plt.xlabel("Time (ms)")
+plt.ylabel("Roll (deg)")
+plt.savefig("data/roll.png")
+
+# Plot the pitch data as a function of time
+plt.plot(data[:, 0], abs(data[:, 3] - np.max(data[:,3])), color="green")
+plt.xlabel("Time (ms)")
+plt.ylabel("Pitch (deg)")
+plt.savefig("data/pitch.png")
+
+# Plot the yaw data as a function of time
+plt.plot(data[:, 0], abs(data[:, 4] - np.max(data[:,4])), color="blue")
+plt.xlabel("Time (ms)")
+plt.ylabel("Yaw (deg)")
+plt.savefig("data/yaw.png")
+

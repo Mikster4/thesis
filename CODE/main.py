@@ -26,17 +26,17 @@ class AirModule:
         def __str__(self):
             return "Air Module"
 
-        # Function to open the input valve for given time
-        def inflate(self, time):
-            self.base_module.write(bytes([0xFF, 0x03, hex(self.dig_in)]))
-            time.sleep(time)
-            self.base_module.write(bytes([0xFF, 0x03, 0x10 + hex(self.dig_in)]))
+    # Function to open the input valve for given time
+    def inflate(self, time):
+        self.base_module.write(bytes([0xFF, 0x03, hex(self.dig_in)]))
+        time.sleep(time)
+        self.base_module.write(bytes([0xFF, 0x03, 0x10 + hex(self.dig_in)]))
 
-        # Function to open the output valve for given time
-        def deflate(self, time):
-            self.base_module.write(bytes([0xFF, 0x03, hex(self.dig_out)]))
-            time.sleep(time)
-            self.base_module.write(bytes([0xFF, 0x03, 0x10 + hex(self.dig_out)]))
+    # Function to open the output valve for given time
+    def deflate(self, time):
+        self.base_module.write(bytes([0xFF, 0x03, hex(self.dig_out)]))
+        time.sleep(time)
+        self.base_module.write(bytes([0xFF, 0x03, 0x10 + hex(self.dig_out)]))
 
 
 # Class for base module
@@ -61,37 +61,47 @@ class BaseModule:
 
     def __str__(self):
         return "Base Module\nAir Modules: " + str(self.air_modules) + "\n"
-    
+
+    # Quick initialization
+    def quick_init(self):
+        # Opens the input valve for all air modules for brief period
+        for p in self.air_pins:
+            self.write_bytes(bytearray([0x10, 0x40 + p[0], 0x11]))
+        time.sleep(0.1)
+        for p in self.air_pins:
+            self.write_bytes(bytearray([0x10, 0x50 + p[0], 0x11]))
+        time.sleep(0.1)
+        
+        # Opens the output valve for all air modules for longer period to remove air
+        for p in self.air_pins:
+            self.write_bytes(bytearray([0x10, 0x40 + p[1], 0x11]))
+        time.sleep(1)
+        for p in self.air_pins:
+            self.write_bytes(bytearray([0x10, 0x50 + p[1], 0x11]))
+            
+
     # Fancy initialization
     def fancy_init(self):
         # Opens the input valve for all air modules for brief period
         for p in self.air_pins:
-            self.write_bytes(bytearray([0x10,0x40 + p[0],0x11]))
+            self.write_bytes(bytearray([0x10, 0x40 + p[0], 0x11]))
             time.sleep(0.1)
-            self.write_bytes(bytearray([0x10,0x50 + p[0],0x11]))
+            self.write_bytes(bytearray([0x10, 0x50 + p[0], 0x11]))
             time.sleep(0.1)
         time.sleep(0.4)
 
         # Opens the output valve for all air modules for longer period to remove air
         for p in self.air_pins:
-            print(p[1])
-            self.write_bytes(bytearray([0x10,0x40 + p[1],0x11]))
+            self.write_bytes(bytearray([0x10, 0x40 + p[1], 0x11]))
             time.sleep(0.5)
-            self.write_bytes(bytearray([0x10,0x50 + p[1],0x11]))
+            self.write_bytes(bytearray([0x10, 0x50 + p[1], 0x11]))
             time.sleep(0.5)
-
-
-
-        
-            
-    
-
 
     def write_bytes(self, data):
         self.arduino.write(data)
 
     def read_bytes(self):
-        s = self.arduino.readline().decode("utf-8")
+        s = self.arduino.readline().decode("utf-8")[:-1]
         return s
 
     def _is_valid_connection(self, connector):
@@ -154,23 +164,36 @@ class BaseModule:
 # 0x11   - End of message
 
 
-
 if __name__ == "__main__":
     bm = BaseModule()
     # bm.write_bytes(bytes("1", "utf-8"))
-    #bm.read_bytes()
-    
+    # bm.read_bytes()
+
+    #bm.write_bytes(bytearray([0x10,0x31,0x11]))
     #bm.write_bytes(bytearray([0x10,0x32,0x11]))
-    #bm.write_bytes(bytearray([0x10,0x35,0x11]))
-    
+
     bm.fancy_init()
     
+    bm.write_bytes(bytearray([0x10, 0x42, 0x11]))
+    bm.write_bytes(bytearray([0x10, 0x46, 0x11]))
+    bm.write_bytes(bytearray([0x10, 0x48, 0x11]))
+    time.sleep(4)
+    bm.write_bytes(bytearray([0x10, 0x52, 0x11]))
+    bm.write_bytes(bytearray([0x10, 0x56, 0x11]))
+    bm.write_bytes(bytearray([0x10, 0x58, 0x11]))
 
-    
+    time.sleep(5)
+
+    bm.write_bytes(bytearray([0x10, 0x43, 0x11]))
+    bm.write_bytes(bytearray([0x10, 0x47, 0x11]))
+    bm.write_bytes(bytearray([0x10, 0x49, 0x11]))
+    time.sleep(10)
+    bm.write_bytes(bytearray([0x10, 0x53, 0x11]))
+    bm.write_bytes(bytearray([0x10, 0x57, 0x11]))
+    bm.write_bytes(bytearray([0x10, 0x59, 0x11]))
 
 
     while True:
         data = bm.read_bytes()
         if data:
             print(data)
-            

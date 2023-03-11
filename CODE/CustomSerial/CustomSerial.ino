@@ -76,7 +76,7 @@ void readMessage() {
 
       float voltage = 0.0;
       // Do the meassurement
-      if (buf[i] >= 0x30 && buf[i] <= 0x3F && buf[i] % 0x30 >= 1 && buf[i] % 0x30 <= 4) {
+      if (buf[i] % 0x30 >= 1 && buf[i] % 0x30 <= 4) {
         adc_1.startSingleMeasurement();
         voltage = adc_1.getResult_mV();
       } else {
@@ -84,16 +84,19 @@ void readMessage() {
         voltage = adc_2.getResult_mV();
       }
       Serial.println("Voltage: " + String(voltage));
+      continue;
     }
 
     // Handle opening of input valves
     if (buf[i] >= 0x40 && buf[i] <= 0x4F) {
       digitalWrite(buf[i] % 0x40, HIGH);
+      continue;
     }
 
     // Handle closing of input valves
     if (buf[i] >= 0x50 && buf[i] <= 0x5F) {
       digitalWrite(buf[i] % 0x50, LOW);
+      continue;
     }
   }
 }
